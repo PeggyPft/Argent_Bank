@@ -17,8 +17,17 @@ const initialState = {
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData, thunkAPI) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/user/login', loginData);
-        return response.data;
+        console.log('Response Data:', response.data);
+        const {body} = response.data;
+
+        if (body && body.token) {
+            localStorage.setItem('token', body.token);
+            return {token: body.token, user: body.user || {} };
+        } else {
+            return thunkAPI.rejectWithValue({message: 'Invalid response structure'});
+        }
     } catch (error) {
+        console.log('Login Error:', error.response.data);
         return thunkAPI.rejectWithValue(error.response.data);
     }
 });
@@ -61,6 +70,7 @@ const userSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.token = action.payload.token;
+                state.user = action.payload.user;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
