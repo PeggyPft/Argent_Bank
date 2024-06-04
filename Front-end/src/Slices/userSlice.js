@@ -9,7 +9,7 @@ const initialState = {
         email: '',
         id: '',
     },
-    token: '',
+    token: localStorage.getItem('token') || '',
     status: 'idle',
     error: null,
 };
@@ -17,12 +17,11 @@ const initialState = {
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData, thunkAPI) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/user/login', loginData);
-        console.log('Response Data:', response.data);
         const {body} = response.data;
 
         if (body && body.token) {
             localStorage.setItem('token', body.token);
-            return {token: body.token, user: body.user || {} };
+            return {token: body.token};
         } else {
             return thunkAPI.rejectWithValue({message: 'Invalid response structure'});
         }
@@ -40,11 +39,22 @@ export const getUserProfile = createAsyncThunk('user/getUserProfile', async (_,t
                 Authorization: `Bearer ${state.user.token}`,
             },
         });
-        return response.data;
+        const userProfile = response.data.body;
+        localStorage.setItem('userName', userProfile.userName);
+        return userProfile;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
     }
 });
+
+export const restoreUser = createAsyncThunk('user/restoreUser', async (_, thunkAPI) => {
+    const userName = localStorage.getItem('userName');
+    const token = localStorage.getItem('token');
+    if (userName && token) {
+        return {userName, token};
+    }
+    return thunkAPI.rejectWithValue({message: 'No user found in localStorage'});
+})
 
 const userSlice = createSlice({
     name: 'user',
@@ -60,6 +70,7 @@ const userSlice = createSlice({
             };
             state.token = '';
             localStorage.removeItem('token');
+            localStorage.removeItem('userName');
         },          
     },
 
@@ -71,7 +82,6 @@ const userSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.token = action.payload.token;
-                state.user = action.payload.user;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
@@ -82,10 +92,18 @@ const userSlice = createSlice({
             })
             .addCase(getUserProfile.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload.user;
+                state.user = action.payload;
             })
             .addCase(getUserProfile.rejected, (state, action) => {
                 state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(restoreUser.fulfilled, (state, action) => {
+                state.user.userName = action.payload.userName;
+                state.token = action.payload.token;
+            })
+            .addCase(restoreUser.rejected, (state, action) => {
+                state.user.userName = action.payload.userName;
                 state.error = action.payload;
             });
     },
