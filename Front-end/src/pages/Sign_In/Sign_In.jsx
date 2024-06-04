@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {loginUser} from '../../Slices/userSlice';
+import {getUserProfile, loginUser} from '../../Slices/userSlice';
 import {useNavigate} from 'react-router-dom';
 
 const Sign_In = () => {
@@ -9,6 +9,7 @@ const Sign_In = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const status = useSelector((state) => state.user.status);
+    const token = useSelector((state) => state.user.token);
     const error = useSelector((state) => state.user.error);
 
     const handleLogin = (e) => {
@@ -17,7 +18,13 @@ const Sign_In = () => {
     };
 
     useEffect(() => {
-        if (status === 'succeeded') {
+        if (status === 'succeeded' && token) {
+            dispatch(getUserProfile());
+        }
+    }, [status, token, dispatch]);
+
+    useEffect(() => {
+        if (status === 'succeeded' && localStorage.getItem('userName')) {
             navigate('/profile');
         }
     }, [status, navigate]);
