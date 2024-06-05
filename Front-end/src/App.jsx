@@ -12,10 +12,16 @@ import ErrorPage from './components/errorPage/ErrorPage';
 function App () {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.user);
+    const token = useSelector(state => state.user.token);
 
     useEffect(() => {
         dispatch(restoreUser());
     }, [dispatch]);
+
+/* Ajout de useEffect pour afficher les valeurs actuelles de "user" et "token" dans la console à des fins de débogage.
+A supprimer en fin de projet */
+    useEffect(() => {
+    }, [user, token]);
 
     return (
         <BrowserRouter>    
@@ -23,7 +29,7 @@ function App () {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/sign-in" element={<Sign_In/>}/>
-                    {user.id ? (
+                    {token ? (
                         <>
                             <Route path="/profile" element={<User/>}/>
                         </>
