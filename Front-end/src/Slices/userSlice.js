@@ -2,7 +2,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-    user: {
+    user: JSON.parse(localStorage.getItem('user')) || {
         firstName: '',
         userName: '',
         lastName: '',
@@ -40,7 +40,7 @@ export const getUserProfile = createAsyncThunk('user/getUserProfile', async (_,t
             },
         });
         const userProfile = response.data.body;
-        localStorage.setItem('userName', userProfile.userName);
+        localStorage.setItem('user', JSON.stringify(userProfile));
         return userProfile;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
@@ -48,10 +48,10 @@ export const getUserProfile = createAsyncThunk('user/getUserProfile', async (_,t
 });
 
 export const restoreUser = createAsyncThunk('user/restoreUser', async (_, thunkAPI) => {
-    const userName = localStorage.getItem('userName');
+    const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
-    if (userName && token) {
-        return {userName, token};
+    if (user && token) {
+        return {user, token};
     }
     return thunkAPI.rejectWithValue({message: 'No user found in localStorage'});
 })
@@ -70,7 +70,7 @@ const userSlice = createSlice({
             };
             state.token = '';
             localStorage.removeItem('token');
-            localStorage.removeItem('userName');
+            localStorage.removeItem('user');
         },          
     },
 
@@ -99,11 +99,11 @@ const userSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(restoreUser.fulfilled, (state, action) => {
-                state.user.userName = action.payload.userName;
+                state.user = action.payload.user;
                 state.token = action.payload.token;
             })
             .addCase(restoreUser.rejected, (state, action) => {
-                state.user.userName = action.payload.userName;
+                state.user = initialState.user;
                 state.error = action.payload;
             });
     },
