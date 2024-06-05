@@ -24,7 +24,7 @@ const Sign_In = () => {
     }, [status, token, dispatch]);
 
     useEffect(() => {
-        if (status === 'succeeded' && localStorage.getItem('userName')) {
+        if (status === 'succeeded' && localStorage.getItem('user')) {
             navigate('/profile');
         }
     }, [status, navigate]);
