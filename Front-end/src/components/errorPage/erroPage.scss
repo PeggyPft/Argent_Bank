@@ -1,0 +1,42 @@
+.errorPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 100px 0;
+    width: 100%;
+
+    h1 {
+        font-size: 8rem;
+        font-weight: 700;
+        color: rgba(0,188,120);
+        margin: 0;
+    }
+
+    .errorAlert {
+        font-size: 3rem;
+        font-weight: bold;
+        color: rgba(0,88,53);
+        margin: 10px;
+    }
+
+    .errorMessage {
+        font-size: 1.5rem;
+        margin: 40px 25px;
+    }
+
+    .errorLink {
+        margin: 40px 20px;
+
+            .link {
+                font-size: 1.3rem;
+                color: rgba(0,188,120);
+            }
+    }    
+}
+
+@media screen and (min-width: 768px) {
+    .errorPage {
+        margin: 0;
+    }
+}
