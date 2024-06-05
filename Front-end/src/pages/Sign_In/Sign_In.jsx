@@ -20,9 +20,14 @@ const Sign_In = () => {
     useEffect(() => {
         if (status === 'succeeded' && token) {
             dispatch(getUserProfile());
+        }
+    }, [status, token, dispatch]);
+
+    useEffect(() => {
+        if (status === 'succeeded' && localStorage.getItem('userName')) {
             navigate('/profile');
         }
-    }, [status, token, dispatch, navigate]);
+    }, [status, navigate]);
 
     return (
         <main className="main bg-dark">
