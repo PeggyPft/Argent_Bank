@@ -1,11 +1,14 @@
 import React from 'react';
 import ViewTransactions from '../../components/viewTransactions/ViewTransactions';
+import { useSelector } from 'react-redux';
 
 const User = () => {
+    const user = useSelector((state) => state.user.user);
+    
     return (
         <main className="container_User main bg-dark">
         <div className="content_HeaderUser">
-            <h1>Welcome back<br />Tony Jarvis!</h1>
+            <h1>Welcome back<br />{user.firstName} {user.lastName}!</h1>
             <button className="edit-button">Edit Name</button>
         </div>
         <h2 className="sr-only">Accounts</h2>
