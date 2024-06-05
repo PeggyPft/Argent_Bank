@@ -6,7 +6,7 @@ import {logout} from '../../Slices/userSlice';
 
 const Header = () => {
     const dispatch = useDispatch();
-    const userName = useSelector((state) => state.user.user.userName);
+    const user = useSelector((state) => state.user.user);
     const isAuthenticated = !!useSelector((state) => state.user.token);
 
     const handleSignOut = () => {
@@ -20,7 +20,7 @@ const Header = () => {
             </Link>
             {isAuthenticated ? (
                 <div>
-                    <i className="fa fa-user-circle"> <span>{userName}</span></i>
+                    <i className="fa fa-user-circle"> <span>{user.userName}</span></i>
                     <Link to="/" onClick={handleSignOut} > <i className='fa fa-sign-out'> <span>Sign Out</span></i></Link>
                 </div>
             ) : (
