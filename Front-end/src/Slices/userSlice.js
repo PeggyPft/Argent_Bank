@@ -47,6 +47,22 @@ export const getUserProfile = createAsyncThunk('user/getUserProfile', async (_,t
     }
 });
 
+export const updateUserName = createAsyncThunk('user/updateUserName', async (newUserName, thunkAPI) => {
+    try {
+        const state = thunkAPI.getState();
+        const response = await axios.put('http://localhost:3001/api/v1/user/profile', {userName: newUserName}, {
+            headers: {
+                Authorization: `Bearer ${state.user.token}`,
+            },
+        });
+        const updatedUser = response.data.body;
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        return updatedUser;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+});
+
 export const restoreUser = createAsyncThunk('user/restoreUser', async (_, thunkAPI) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
@@ -95,6 +111,17 @@ const userSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(getUserProfile.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(updateUserName.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(updateUserName.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.user = action.payload;
+            })
+            .addCase(updateUserName.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             })

@@ -8,6 +8,7 @@ import User from './pages/User/User';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import ErrorPage from './components/errorPage/ErrorPage';
+import EditUserName from './pages/EditUserName/EditUserName';
 
 function App () {
     const dispatch = useDispatch();
@@ -38,6 +39,7 @@ A supprimer en fin de projet */
                             <Route path="/profile" element={<Navigate to="/error/401"/>}/>
                         </>
                     )}
+                    <Route path="/editUserName" element={<EditUserName/>}/>
                     <Route path="*" element={<ErrorPage errorCode="404" errorAlert="Erreur" errorMessage="La page que vous avez demandée est introuvable"/>}/>
                     <Route path="/error/401" element={<ErrorPage errorCode="401" errorAlert="Authentification requise" errorMessage="Vous devez vous connecter pour accéder à cette page"/>}/>
                 </Routes>
