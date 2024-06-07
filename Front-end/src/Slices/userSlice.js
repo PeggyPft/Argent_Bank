@@ -63,14 +63,18 @@ export const updateUserName = createAsyncThunk('user/updateUserName', async (new
     }
 });
 
-export const restoreUser = createAsyncThunk('user/restoreUser', async (_, thunkAPI) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = localStorage.getItem('token');
-    if (user && token) {
-        return {user, token};
+export const restoreUser = createAsyncThunk('user/restoreUser', async () => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        const response = await axios.post('/api/v1/user/profile', {}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return { user: response.data.body, token };
     }
-    return thunkAPI.rejectWithValue({message: 'No user found in localStorage'});
-})
+    throw new Error('No user found in localStorage');
+});
 
 const userSlice = createSlice({
     name: 'user',
