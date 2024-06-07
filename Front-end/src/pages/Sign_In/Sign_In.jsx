@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserProfile, loginUser} from '../../Slices/userSlice';
 import {useNavigate} from 'react-router-dom';
@@ -10,17 +10,27 @@ const Sign_In = () => {
     const navigate = useNavigate();
     const status = useSelector((state) => state.user.status);
     const token = useSelector((state) => state.user.token);
-    const error = useSelector((state) => state.user.error);
+
+    const tokenRef = useRef(token); /* Référence mutable pour stocker le token actuel*/
 
     const handleLogin = (e) => {
         e.preventDefault();
         dispatch(loginUser({email, password}));
-    };
+    };    
 
     useEffect(() => {
-        if (status === 'succeeded' && token) {
-            dispatch(getUserProfile());
-            navigate('/profile');
+        /* Vérifier si le token a changé */
+        if (tokenRef.current !== token && status === 'succeeded' && token) {
+            dispatch(getUserProfile())
+                .unwrap()
+                .then(() => {
+                    navigate('/profile');
+                })
+                .catch((err) => {
+                    console.error('Failed to get user profile:', err);
+                });
+            /* Mettre à jour la référence du token */
+            tokenRef.current = token;
         }
     }, [status, token, dispatch, navigate]);
 
