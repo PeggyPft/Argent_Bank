@@ -1,0 +1,113 @@
+.container_main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+
+    .title_Edit_User {
+        font-size: 1.5rem;
+    }
+
+    .error {
+        font-size: 1rem;
+        color: red;
+        margin-bottom: 20px;
+    }
+
+    .success {
+        font-size: 1rem;
+        color: green;
+        margin-bottom: 20px;
+    }
+
+    .container_Form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .line_Label_Input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        gap: 8px;
+    }
+
+    input {
+        width: 100px;
+        height: 17px;
+        border: solid 1px rgb(221 213 213);
+        background-color: rgb(227 227 227);
+        border-radius: 3px;
+        color: grey;
+    }
+
+    .userName_Input {
+        background-color: white;
+        color: black;
+        cursor: pointer;
+    }
+    
+    .container_Button{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+
+        button {
+            width: 115px;
+            padding: 10px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            border-color: #00bc77;
+            background-color: #00bc77;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+        }
+    }   
+    
+    .container_Transactions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: white;
+        width: 700px;
+
+        .box_content {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #464343;
+            border-radius: 5px;
+            text-align: left;
+            padding: 10px;
+
+            .content {
+                margin: 0;
+                padding: 5px; 
+            }
+
+            .title_Transactions {
+                font-size: 0.8rem;
+            }
+
+            .balance {
+                font-size: 1.5rem;
+            }
+
+            .available {
+                font-size: 0.6rem;
+            }
+            
+            .imgArrow {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}
