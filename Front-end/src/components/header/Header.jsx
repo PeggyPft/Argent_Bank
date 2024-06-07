@@ -19,7 +19,7 @@ const Header = () => {
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
             {isAuthenticated ? (
-                <div>
+                <div className='content-nav'>
                     <i className="fa fa-user-circle"> <span>{user.userName}</span></i>
                     <Link to="/" onClick={handleSignOut} > <i className='fa fa-sign-out'> <span>Sign Out</span></i></Link>
                 </div>

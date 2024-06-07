@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 20px;
+    padding: 5px 15px;
 
     .main-nav-logo {
        display: flex;
@@ -14,12 +14,18 @@
         max-width: 100%;
         width: 200px;
     }
-
-    .main-nav-item {
+    .content-nav {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      width: 180px;
+      gap: 4px;
+    }
+    a {
         text-decoration: none;
         margin-right: 0.5rem;
         font-size: 1.1rem;
-        font-weight: bold;
         color: #2c3e50;
 
         span {
@@ -30,4 +36,12 @@
             }
           }
       }  
+}
+
+@media screen and (min-width: 768px) {
+  .main-nav {
+    .content-nav {
+      gap: 8px;
+    }
+  }
 }
