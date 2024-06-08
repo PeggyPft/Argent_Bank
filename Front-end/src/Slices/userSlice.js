@@ -2,14 +2,14 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-    user: JSON.parse(localStorage.getItem('user')) || {
+    user: JSON.parse(sessionStorage.getItem('user')) || {
         firstName: '',
         userName: '',
         lastName: '',
         email: '',
         id: '',
     },
-    token: localStorage.getItem('token') || '',
+    token: sessionStorage.getItem('token') || '',
     status: 'idle',
     error: null,
 };
@@ -20,7 +20,7 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData, th
         const {body} = response.data;
 
         if (body && body.token) {
-            localStorage.setItem('token', body.token);
+            sessionStorage.setItem('token', body.token);
             return {token: body.token};
         } else {
             return thunkAPI.rejectWithValue({message: 'Invalid response structure'});
@@ -40,7 +40,7 @@ export const getUserProfile = createAsyncThunk('user/getUserProfile', async (_,t
             },
         });
         const userProfile = response.data.body;
-        localStorage.setItem('user', JSON.stringify(userProfile));
+        sessionStorage.setItem('user', JSON.stringify(userProfile));
         return userProfile;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
@@ -56,7 +56,7 @@ export const updateUserName = createAsyncThunk('user/updateUserName', async (new
             },
         });
         const updatedUser = response.data.body;
-        localStorage.setItem('user', JSON.stringify(updatedUser));
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
         return updatedUser;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
@@ -64,7 +64,7 @@ export const updateUserName = createAsyncThunk('user/updateUserName', async (new
 });
 
 export const restoreUser = createAsyncThunk('user/restoreUser', async () => {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     if (token) {
         const response = await axios.post('/api/v1/user/profile', {}, {
             headers: {
@@ -73,7 +73,7 @@ export const restoreUser = createAsyncThunk('user/restoreUser', async () => {
         });
         return { user: response.data.body, token };
     }
-    throw new Error('No user found in localStorage');
+    throw new Error('No user found in sessionStorage');
 });
 
 const userSlice = createSlice({
@@ -89,8 +89,8 @@ const userSlice = createSlice({
                 id: '',                
             };
             state.token = '';
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
         },          
     },
 
