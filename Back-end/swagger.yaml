@@ -69,7 +69,7 @@ paths:
        # - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -94,11 +94,132 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get Transactions for the Current Month
+      description: API for fetching all transactions of a specific account for the current Month
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          type: string
+          description: the ID of the account to fetch transactions for
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successully
+          schema:
+            $ref: '#/definitions/TransactionsResponse'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized - Authentication is required and has failed
+        '404':
+          description: Not found - the requested resource could not be found
+        '500':
+          description: Internal Server Error
+  /transactions/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get Transactions Details
+      description: API for fetching details of a specific transaction
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          type: string
+          description: the ID of the transaction to fetch
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions details retrieved successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized - Authentication is required and has failed
+        '404':
+          description: Not found - the requested resource could not be found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Update Transaction
+      description: API for updating a transaction's category and note
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          type: string
+          description: the ID of the transaction to update
+        - in: body
+          name: body
+          required: true
+          description: Update transaction payload
+          schema:
+            $ref: '#/definitions/TransactionUpdate'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction updated successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized - Authentication is required and has failed
+        '404':
+          description: Not found - the requested resource could not be found
+        '500':
+          description: Internal Server Error
+  /transactions/{transactionId}/info:
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Delete Transaction Info
+      description: API for deleting the category and note of a specific transaction
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          type: string
+          description: the ID of the transaction to delete info from        
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction info deleted successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized - Authentication is required and has failed
+        '404':
+          description: Not found - the requested resource could not be found
         '500':
           description: Internal Server Error
 securityDefinitions:
@@ -155,4 +276,40 @@ definitions:
     type: object
     properties:
       userName:
+        type: string
+  TransactionsResponse:
+    type: object
+    properties: 
+      transactions:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+        format: date
+      description:
+        type: string
+      amount:
+        type: number
+        format: float
+      balance:
+        type: number
+        format: float
+      transactionType:
+        type: string
+      category:
+        type: string
+      note:
+        type: string
+  TransactionUpdate:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
         type: string
