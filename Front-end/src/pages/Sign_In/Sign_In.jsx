@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserProfile, loginUser} from '../../Slices/userSlice';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 
 const Sign_In = () => {
     const [email, setEmail] = useState('');
@@ -54,6 +54,10 @@ const Sign_In = () => {
                 </div> 
                 <button className="sign-in-button" type="submit">Sign In</button>
                 {status ==='failed' && <p className='errorLogin'>Saisie incorrecte</p> }
+                <div className='sign-up-content'>
+                    <p>New customer ?</p>
+                    <Link to="/sign-up">Sign Up</Link>
+                </div>
             </form>
     </section>
   </main>

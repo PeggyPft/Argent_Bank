@@ -14,6 +14,23 @@ const initialState = {
     error: null,
 };
 
+export const createUser = createAsyncThunk('user/createUser', async (userData, thunkAPI) => {
+    try {
+        const response = await axios.post('http://localhost:3001/api/v1/user/signup', userData);
+        console.log('API response:', response.data);
+        const {body, message} = response.data;
+
+        if (body) {
+            return {message};
+        } else {
+            return thunkAPI.rejectWithValue({message: 'Invalid response structure'});
+        }
+    } catch (error) {
+        console.log('Signup Error:', error.response.data);
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+});
+
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData, thunkAPI) => {
     try {
         const response = await axios.post('http://localhost:3001/api/v1/user/login', loginData);
@@ -95,7 +112,17 @@ const userSlice = createSlice({
     },
 
     extraReducers: (builder) => {
-        builder 
+        builder
+            .addCase(createUser.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(createUser.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+            })
+            .addCase(createUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
             .addCase(loginUser.pending, (state) => {
                 state.status = 'loading';
             })

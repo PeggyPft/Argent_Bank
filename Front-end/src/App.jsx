@@ -4,6 +4,7 @@ import { restoreUser } from './Slices/userSlice';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Sign_In from './pages/Sign_In/Sign_In';
+import Sign_Up from './components/sign_Up/Sign_Up';
 import User from './pages/User/User';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
@@ -19,17 +20,13 @@ function App () {
         dispatch(restoreUser());
     }, [dispatch]);
 
-/* Ajout de useEffect pour afficher les valeurs actuelles de "user" et "token" dans la console à des fins de débogage.
-A supprimer en fin de projet */
-    useEffect(() => {
-    }, [user, token]);
-
     return (
         <BrowserRouter>    
             <Header/>  
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/sign-in" element={<Sign_In/>}/>
+                    <Route path="/sign-up" element={<Sign_Up/>}/>
                     {token ? (
                         <>
                             <Route path="/profile" element={<User/>}/>
