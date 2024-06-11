@@ -183,8 +183,6 @@ paths:
       responses:
         '200':
           description: Transaction updated successfully
-          schema:
-            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '401':
@@ -206,14 +204,18 @@ paths:
           name: transactionId
           required: true
           type: string
-          description: the ID of the transaction to delete info from        
+          description: the ID of the transaction to delete info from
+        - in: body
+          name: body
+          required: true
+          description: Delete transaction payload
+          schema:
+            $ref: '#/definitions/TransactionUpdate'    
       produces:
         - application/json
       responses:
         '200':
           description: Transaction info deleted successfully
-          schema:
-            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '401':
